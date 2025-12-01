@@ -412,6 +412,28 @@ union mat4 {
 		return result;
 	}
 
+	static mat4 lookAt(vec3 eye, vec3 center, vec3 up) {
+		vec3 f = vec3::normalized(center - eye);
+		vec3 s = vec3::normalized(vec3::cross(f, up));
+		vec3 u = vec3::cross(s, f);
+
+		mat4 result = mat4::identity();
+		result[0][0] = s.x;
+		result[0][1] = s.y;
+		result[0][2] = s.z;
+		result[1][0] = u.x;
+		result[1][1] = u.y;
+		result[1][2] = u.z;
+		result[2][0] = -f.x;
+		result[2][1] = -f.y;
+		result[2][2] = -f.z;
+		result[3][0] = -vec3::dot(s, eye);
+		result[3][1] = -vec3::dot(u, eye);
+		result[3][2] = vec3::dot(f, eye);
+
+		return result;
+	}
+
 	mat4 operator*(const mat4& other) const {
 		mat4 result{};
 
